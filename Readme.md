@@ -1,7 +1,7 @@
 # Проект «Киноман» [![Check status][check-image]][check-url]
 
 * Студент: [Smirnov Alexey](https://up.htmlacademy.ru/ecmascript/13/user/1429123).
-* Наставник: `Неизвестно`.
+* Наставник: `Евгений Колегов`.
 
 ---
 
