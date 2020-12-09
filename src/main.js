@@ -26,7 +26,7 @@ render(siteMainElement, createSiteMenuTemplate(), `beforeend`); //отрисов
 
 const siteStatsElement = siteMainElement.querySelector(`.main-navigation`);
 
-render(siteStatsElement, createStatsTemplate(), `beforeend`);//отрисовка фильтров
+render(siteStatsElement, createStatsTemplate(), `beforeend`);//отрисовка статистики в меню
 render(siteMainElement, createSortTemplate(), `beforeend`);//отрисовка фильтров
 render(siteMainElement, createFilmsTemplate(), `beforeend`);//отрисовка главного блока фильмов
 render(siteFooterStatisticElement, createFooterStatisticTemplate(), `beforeend`);//отрисовка статистика фильмов в футере
