@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 // Функция из интернета по генерации случайного целого числа из диапазона
 // Источник - https://github.com/you-dont-need/You-Dont-Need-Lodash-Underscore#_random
 export const getRandomInteger = (a = 0, b = 1) => {
@@ -20,4 +22,8 @@ export const generateWord = (currentWord) => {
   const randomIndex = getRandomInteger(0, currentWord.length - 1);
       
   return currentWord[randomIndex];
+};
+
+export const generateDay = (dueDate) => {
+  return dayjs(dueDate).format(`D MMMM YYYY`);
 };

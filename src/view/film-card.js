@@ -1,5 +1,7 @@
+import {getRandomInteger} from "../utils.js";
+
 export const createFilmCardTemplate = (film) => {
-  const {title, genre, year, rating, poster, duration, comments, description, isAddToWatchlist, isWatchlist, isFavorite} = film;
+  const {title, genre, year, rating, poster, duration, description, isAddToWatchlist, isWatchlist, isFavorite} = film;
 
   const addToWatchClassName = isAddToWatchlist
     ? `film-card__controls-item--add-to-watchlist film-card__controls-item--active`
@@ -23,7 +25,7 @@ export const createFilmCardTemplate = (film) => {
     </p>
     <img src="./images/posters/${poster}" alt="" class="film-card__poster">
     <p class="film-card__description">${description}</p>
-    <a class="film-card__comments">${comments} comments</a>
+    <a class="film-card__comments">${getRandomInteger(0, 2000)} comments</a>
     <div class="film-card__controls">
       <button class="film-card__controls-item button ${addToWatchClassName}" type="button">Add to watchlist</button>
       <button class="film-card__controls-item button ${isWatchClassName}" type="button">Mark as watched</button>
