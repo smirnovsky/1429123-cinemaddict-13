@@ -9,9 +9,15 @@ import {createFilmCardTemplate} from "./view/film-card.js";
 import {createTopRatedFilmListTemplate} from "./view/top-rated-list.js";
 import {createMostCommentedFilmListTemplate} from "./view/most-commented-list.js";
 import {createFooterStatisticTemplate} from "./view/footer-statistic.js";
+import {generateFilm} from "./mock/film.js";
+import {generateFilter} from "./mock/filter.js";
 
-const FILM_COUNT = 5;
+const FILM_COUNT = 15;
+const FILM_COUNT_PER_STEP = 5;
 const TOP_FILM_COUNT = 2;
+
+const films = new Array(FILM_COUNT).fill().map(generateFilm);
+const filters = generateFilter(films);
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -22,7 +28,7 @@ const siteMainElement = document.querySelector(`.main`);
 const siteFooterStatisticElement = document.querySelector(`.footer__statistics`);
 
 render(siteHeaderElement, createUserRankTemplate(), `beforeend`); //отрисовка звания пользователя
-render(siteMainElement, createSiteMenuTemplate(), `beforeend`); //отрисовка меню
+render(siteMainElement, createSiteMenuTemplate(filters), `beforeend`); //отрисовка меню
 
 const siteStatsElement = siteMainElement.querySelector(`.main-navigation`);
 
@@ -38,11 +44,30 @@ render(filmsElement, createFilmListTemplate(), `beforeend`);//отрисовка
 const filmListElement = filmsElement.querySelector(`.films-list`);
 const filmListContainerElement = filmListElement.querySelector(`.films-list__container`);
 
-for (let i = 0; i < FILM_COUNT; i++) {
-    render(filmListContainerElement, createFilmCardTemplate(), `beforeend`);
+for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
+    render(filmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 } //отрисовка карточек с фильмами
 
-render(filmListElement, createShowMoreButtonTemplate(), `beforeend`);//отрисовка кнопки "показать больше"
+if (films.length > FILM_COUNT_PER_STEP) {
+  let renderedFilmCount = FILM_COUNT_PER_STEP;
+
+  render(filmListElement, createShowMoreButtonTemplate(), `beforeend`);
+  
+  const loadMoreButton = filmListElement.querySelector(`.films-list__show-more`);
+  
+  loadMoreButton.addEventListener(`click`, (evt) => {
+  evt.preventDefault();
+  films
+    .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
+    .forEach((film) => render(filmListContainerElement, createFilmCardTemplate(film), `beforeend`));
+
+  renderedFilmCount += FILM_COUNT_PER_STEP;
+
+  if (renderedFilmCount >= films.length) {
+    loadMoreButton.remove();
+  }
+  });
+}//отрисовка кнопки "показать больше"
 
 render(filmsElement, createTopRatedFilmListTemplate(), `beforeend`);//отрисовка блока, который отвечает за отображение списка рейтинговых фильмов
 
@@ -50,7 +75,7 @@ const topFilmListElement = filmsElement.querySelector(`.films-list--extra`);
 const topFilmListContainerElement = topFilmListElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < TOP_FILM_COUNT; i++) {
-    render(topFilmListContainerElement, createFilmCardTemplate(), `beforeend`);
+    render(topFilmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 } //отрисовка карточек с рейтинговыми фильмами
 
 render(filmsElement, createMostCommentedFilmListTemplate(), `beforeend`);//отрисовка блока, который отвечает за отображение списка просматриваемых фильмов
@@ -59,6 +84,6 @@ const commentedFilmListElement = filmsElement.querySelector(`.films-list--extra:
 const commentedFilmListContainerElement = commentedFilmListElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < TOP_FILM_COUNT; i++) {
-    render(commentedFilmListContainerElement, createFilmCardTemplate(), `beforeend`);
+    render(commentedFilmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 } //отрисовка карточек с просматриваемыми фильмами
 
