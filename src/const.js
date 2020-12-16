@@ -1,4 +1,5 @@
 export const RANK = [
+  ``,
   `novice`,
   `fan`,
   `movie buff`,

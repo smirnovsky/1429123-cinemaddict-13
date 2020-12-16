@@ -9,6 +9,7 @@ import {createFilmCardTemplate} from "./view/film-card.js";
 import {createTopRatedFilmListTemplate} from "./view/top-rated-list.js";
 import {createMostCommentedFilmListTemplate} from "./view/most-commented-list.js";
 import {createFooterStatisticTemplate} from "./view/footer-statistic.js";
+import {createPopupTemplate} from "./view/popup.js";
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
 
@@ -87,3 +88,4 @@ for (let i = 0; i < TOP_FILM_COUNT; i++) {
     render(commentedFilmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
 } //отрисовка карточек с просматриваемыми фильмами
 
+render(document.body, createPopupTemplate(), `beforeend`); //отрисовка попапа
