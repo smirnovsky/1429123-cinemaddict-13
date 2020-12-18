@@ -13,7 +13,6 @@ import {createPopupTemplate} from "./view/popup.js";
 import {createPopupCommentsTemplate} from "./view/popup-comments.js";
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
-import {generateComments} from "./mock/film.js";
 
 const FILM_COUNT = 15;
 const FILM_COUNT_PER_STEP = 5;
@@ -22,7 +21,6 @@ const FILM_COUNT_POPUP = 1;
 
 const films = new Array(FILM_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
-const comments = generateComments();
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
