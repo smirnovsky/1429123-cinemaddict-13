@@ -10,8 +10,10 @@ import {createTopRatedFilmListTemplate} from "./view/top-rated-list.js";
 import {createMostCommentedFilmListTemplate} from "./view/most-commented-list.js";
 import {createFooterStatisticTemplate} from "./view/footer-statistic.js";
 import {createPopupTemplate} from "./view/popup.js";
+import {createPopupCommentsTemplate} from "./view/popup-comments.js";
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
+import {generateComments} from "./mock/film.js";
 
 const FILM_COUNT = 15;
 const FILM_COUNT_PER_STEP = 5;
@@ -20,6 +22,7 @@ const FILM_COUNT_POPUP = 1;
 
 const films = new Array(FILM_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
+const comments = generateComments();
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -92,3 +95,10 @@ for (let i = 0; i < TOP_FILM_COUNT; i++) {
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_POPUP); i++) {
   render(document.body, createPopupTemplate(films[i]), `beforeend`);
 } //отрисовка попапа
+
+const popupCommentsListElement = document.body.querySelector(`.film-details__comments-list`);
+
+for (let i = 0; i < 3; i++) {
+  render(popupCommentsListElement, createPopupCommentsTemplate(films[i]), `beforeend`);
+} //отрисовка попапа
+

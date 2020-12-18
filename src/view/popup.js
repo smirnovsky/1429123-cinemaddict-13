@@ -1,7 +1,5 @@
-import {generateDay, getRandomInteger} from "../utils.js";
-
-export const createPopupTemplate = (film, dueDate) => {
-  const {title, originalTitle, director, writers, actors, country, genre, comments, rating, poster, duration, description} = film;
+export const createPopupTemplate = (film) => {
+  const {title, originalTitle, ageLimit, director, writers, actors, country, release, genre, comments, rating, poster, duration, description} = film;
 
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -13,7 +11,7 @@ export const createPopupTemplate = (film, dueDate) => {
         <div class="film-details__poster">
           <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
 
-          <p class="film-details__age">${getRandomInteger(0, 18)}+</p>
+          <p class="film-details__age">${ageLimit}+</p>
         </div>
 
         <div class="film-details__info">
@@ -43,7 +41,7 @@ export const createPopupTemplate = (film, dueDate) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${generateDay(dueDate)}</td>
+              <td class="film-details__cell">${release}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
@@ -82,22 +80,10 @@ export const createPopupTemplate = (film, dueDate) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${getRandomInteger(0, 2000)}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${film.comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-          <li class="film-details__comment">
-            <span class="film-details__comment-emoji">
-              <img src="./images/emoji/smile.png" width="55" height="55" alt="emoji-smile">
-            </span>
-            <div>
-              <p class="film-details__comment-text">${comments[0].text}</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">${comments[0].author}</span>
-                <span class="film-details__comment-day">${comments[0].text}</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>
+          
         </ul>
 
         <div class="film-details__new-comment">

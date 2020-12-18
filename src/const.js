@@ -23,3 +23,5 @@ export const DESCRIPTIONS = [
 export const TITLES = [`Santa Claus`, `The dance of life`, `The great flamarion`, `The Winnie Pooh`, `Popye meets sinbad`];
 
 export const GENRIES = [`Comedy`, `Drama`, `Action`, `Musical`, `Cartoon`];
+
+export const EMOJIES = [`smile`, `sleeping`, `puke`, `angry`];
