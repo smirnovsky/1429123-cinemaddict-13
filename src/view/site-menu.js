@@ -11,7 +11,7 @@ const createSiteMenuItemTemplate = (filter) => {
 
 const createSiteMenuTemplate = (filterItems) => {
   const filterItemsTemplate = filterItems
-    .map((filter, index) => createSiteMenuItemTemplate(filter, index === 0))
+    .map((filter) => createSiteMenuItemTemplate(filter))
     .join(``);
 
   return `<nav class="main-navigation">

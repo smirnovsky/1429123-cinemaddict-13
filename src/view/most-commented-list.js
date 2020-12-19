@@ -10,7 +10,7 @@ const createMostCommentedFilmListTemplate = () => {
     </section>`;
 };
 
-export default class MostCommentedFilmList {
+export default class MostCommentedList {
   constructor(film) {
     this._film = film;
 

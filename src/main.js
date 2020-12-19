@@ -6,17 +6,16 @@ import FilmsView from "./view/films.js";
 import ShowMoreButtonView from "./view/show-more-btn.js";
 import FilmListView from "./view/film-list.js";
 import FilmCardView from "./view/film-card.js";
-import TopRatedFilmListView from "./view/top-rated-list.js";
-import MostCommentedFilmListView from "./view/most-commented-list.js";
+import TopRatedListView from "./view/top-rated-list.js";
+import MostCommentedListView from "./view/most-commented-list.js";
 import FooterStatisticView from "./view/footer-statistic.js";
 import PopupView from "./view/popup.js";
-import PopupCommentsView from "./view/popup-comments.js";
 import NoFilmView from "./view/no-film.js";
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
 import {render, RenderPosition} from "./utils.js";
 
-const FILM_COUNT = 10;
+const FILM_COUNT = 15;
 const FILM_COUNT_PER_STEP = 5;
 const TOP_FILM_COUNT = 2;
 
@@ -55,10 +54,6 @@ const renderFilm = (filmElement, film) => {
     if (target.classList.contains(`film-card__comments`) || target.classList.contains(`film-card__title`) || target.classList.contains(`film-card__poster`)) {
       render(document.body, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
       document.body.classList.add(`hide-overflow`);
-      const popupCommentsListElement = document.body.querySelector(`.film-details__comments-list`);
-      for (let i = 0; i < 3; i++) {
-        render(popupCommentsListElement, new PopupCommentsView(films[i]).getElement(), RenderPosition.BEFOREEND);
-      }
       document.addEventListener(`keydown`, onEscKeyDown);
 
       filmPopupComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, () => {
@@ -111,7 +106,7 @@ const renderBoard = (listContainer, listFilms) => {
     });
   }// отрисовка кнопки "показать больше"
 
-  render(listComponent.getElement(), new TopRatedFilmListView().getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка рейтинговых фильмов
+  render(listComponent.getElement(), new TopRatedListView().getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка рейтинговых фильмов
 
   const topFilmListElement = listComponent.getElement().querySelector(`.films-list--extra`);
   const topFilmListContainerElement = topFilmListElement.querySelector(`.films-list__container`);
@@ -120,7 +115,7 @@ const renderBoard = (listContainer, listFilms) => {
     renderFilm(topFilmListContainerElement, films[i]);
   } // отрисовка карточек с рейтинговыми фильмами
 
-  render(listComponent.getElement(), new MostCommentedFilmListView().getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка просматриваемых фильмов
+  render(listComponent.getElement(), new MostCommentedListView().getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка просматриваемых фильмов
 
   const commentedFilmListElement = listComponent.getElement().querySelector(`.films-list--extra:nth-child(4)`);
   const commentedFilmListContainerElement = commentedFilmListElement.querySelector(`.films-list__container`);

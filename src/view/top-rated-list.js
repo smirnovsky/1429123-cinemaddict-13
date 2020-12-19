@@ -10,7 +10,7 @@ const createTopRatedFilmListTemplate = () => {
     </section>`;
 };
 
-export default class TopRatedFilmList {
+export default class TopRatedList {
   constructor(film) {
     this._film = film;
 

@@ -1,43 +1,41 @@
-import {createElement} from "../utils.js";
+import {getRandomInteger, generateDay} from "../utils.js";
+import {EMOJIES} from "../const.js";
 
-const createPopupCommentsTemplate = (film) => {
-  const {comments} = film;
+export const generatePopupComments = () => {
+  const comments = [
+    `Хороший фильм!`,
+    `Понравился`,
+    `Что-то скучно...`,
+    `Рекомендую`
+  ];
 
-  return `<li class="film-details__comment">
-  <span class="film-details__comment-emoji">
-    <img src="./images/emoji/${comments[0].emoji}.png" width="55" height="55" alt="emoji-smile">
-  </span>
-  <div>
-    <p class="film-details__comment-text">${comments[0].text}</p>
-    <p class="film-details__comment-info">
-      <span class="film-details__comment-author">${comments[0].author}</span>
-      <span class="film-details__comment-day">${comments[0].text}</span>
-      <button class="film-details__comment-delete">Delete</button>
-    </p>
-  </div>
-</li>`;
+  const authors = [
+    `Иван Иванов`,
+    `Кот Матроскин`,
+    `Доктор Ватсон`,
+    `Вася Пупкин`
+  ];
+
+  const generateComment = () => {
+    return comments[getRandomInteger(0, comments.length - 1)];
+  };
+
+  const generateCommentAuthor = () => {
+    return authors[getRandomInteger(0, authors.length - 1)];
+  };
+
+  const generateCommentEmoji = () => {
+    return EMOJIES[getRandomInteger(0, EMOJIES.length - 1)];
+  };
+
+  const generatePopupComment = () => {
+    return {
+      comment: generateComment(),
+      author: generateCommentAuthor(),
+      emoji: generateCommentEmoji(),
+      date: generateDay()
+    };
+  };
+
+  return new Array(getRandomInteger(1, 4)).fill().map(generatePopupComment);
 };
-
-export default class PopupComments {
-  constructor(film) {
-    this._film = film;
-
-    this._element = null;
-  }
-
-  getTemplate() {
-    return createPopupCommentsTemplate(this._film);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-}
