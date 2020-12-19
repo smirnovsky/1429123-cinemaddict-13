@@ -1,4 +1,6 @@
-export const createPopupCommentsTemplate = (film) => {
+import {createElement} from "../utils.js";
+
+const createPopupCommentsTemplate = (film) => {
   const {comments} = film;
 
   return `<li class="film-details__comment">
@@ -15,3 +17,27 @@ export const createPopupCommentsTemplate = (film) => {
   </div>
 </li>`;
 };
+
+export default class PopupComments {
+  constructor(film) {
+    this._film = film;
+
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPopupCommentsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

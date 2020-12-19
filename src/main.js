@@ -1,102 +1,133 @@
-import {createSiteMenuTemplate} from "./view/site-menu.js";
-import {createStatsTemplate} from "./view/stats.js";
-import {createSortTemplate} from "./view/sort.js";
-import {createUserRankTemplate} from "./view/user-rank.js";
-import {createFilmsTemplate} from "./view/films.js";
-import {createShowMoreButtonTemplate} from "./view/show-more-btn";
-import {createFilmListTemplate} from "./view/film-list.js";
-import {createFilmCardTemplate} from "./view/film-card.js";
-import {createTopRatedFilmListTemplate} from "./view/top-rated-list.js";
-import {createMostCommentedFilmListTemplate} from "./view/most-commented-list.js";
-import {createFooterStatisticTemplate} from "./view/footer-statistic.js";
-import {createPopupTemplate} from "./view/popup.js";
-import {createPopupCommentsTemplate} from "./view/popup-comments.js";
+import SiteMenuView from "./view/site-menu.js";
+import StatsView from "./view/stats.js";
+import SortView from "./view/sort.js";
+import UserRankView from "./view/user-rank.js";
+import FilmsView from "./view/films.js";
+import ShowMoreButtonView from "./view/show-more-btn.js";
+import FilmListView from "./view/film-list.js";
+import FilmCardView from "./view/film-card.js";
+import TopRatedFilmListView from "./view/top-rated-list.js";
+import MostCommentedFilmListView from "./view/most-commented-list.js";
+import FooterStatisticView from "./view/footer-statistic.js";
+import PopupView from "./view/popup.js";
+import PopupCommentsView from "./view/popup-comments.js";
 import {generateFilm} from "./mock/film.js";
 import {generateFilter} from "./mock/filter.js";
+import {render, RenderPosition} from "./utils.js";
 
 const FILM_COUNT = 15;
 const FILM_COUNT_PER_STEP = 5;
 const TOP_FILM_COUNT = 2;
-const FILM_COUNT_POPUP = 1;
 
 const films = new Array(FILM_COUNT).fill().map(generateFilm);
 const filters = generateFilter(films);
-
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
 
 const siteHeaderElement = document.querySelector(`.header`);
 const siteMainElement = document.querySelector(`.main`);
 const siteFooterStatisticElement = document.querySelector(`.footer__statistics`);
 
-render(siteHeaderElement, createUserRankTemplate(), `beforeend`); //отрисовка звания пользователя
-render(siteMainElement, createSiteMenuTemplate(filters), `beforeend`); //отрисовка меню
+render(siteHeaderElement, new UserRankView().getElement(), RenderPosition.BEFOREEND); // отрисовка звания пользователя
+render(siteMainElement, new SiteMenuView(filters).getElement(), RenderPosition.BEFOREEND); // отрисовка меню
 
 const siteStatsElement = siteMainElement.querySelector(`.main-navigation`);
 
-render(siteStatsElement, createStatsTemplate(), `beforeend`);//отрисовка статистики в меню
-render(siteMainElement, createSortTemplate(), `beforeend`);//отрисовка фильтров
-render(siteMainElement, createFilmsTemplate(), `beforeend`);//отрисовка главного блока фильмов
-render(siteFooterStatisticElement, createFooterStatisticTemplate(), `beforeend`);//отрисовка статистика фильмов в футере
+render(siteStatsElement, new StatsView().getElement(), RenderPosition.BEFOREEND);// отрисовка статистики в меню
+
+const SortComponent = new SortView();
+render(siteMainElement, SortComponent.getElement(), RenderPosition.BEFOREEND);// отрисовка фильтров
+
+const FilmsComponent = new FilmsView();
+render(siteMainElement, FilmsComponent.getElement(), RenderPosition.BEFOREEND);// отрисовка главного блока фильмов
+
+const FooterStatisticComponent = new FooterStatisticView();
+render(siteFooterStatisticElement, FooterStatisticComponent.getElement(), RenderPosition.BEFOREEND);// отрисовка статистика фильмов в футере
 
 const filmsElement = siteMainElement.querySelector(`.films`);
 
-render(filmsElement, createFilmListTemplate(), `beforeend`);//отрисовка блока, который отвечает за отображение списка фильмов
+const FilmListComponent = new FilmListView();
+
+render(filmsElement, FilmListComponent.getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка фильмов
 
 const filmListElement = filmsElement.querySelector(`.films-list`);
 const filmListContainerElement = filmListElement.querySelector(`.films-list__container`);
 
+const renderFilm = (filmElement, film) => {
+  const filmCardComponent = new FilmCardView(film);
+  const filmPopupComponent = new PopupView(film);
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === `Escape` || evt.key === `Esc`) {
+      evt.preventDefault();
+      filmPopupComponent.getElement().remove();
+      filmPopupComponent.removeElement();
+      document.body.classList.remove(`hide-overflow`);
+      document.removeEventListener(`keydown`, onEscKeyDown);
+    }
+  };
+
+  render(filmElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
+
+  filmCardComponent.getElement().addEventListener(`click`, (evt) => {
+    let target = evt.target;
+    if (target.classList.contains(`film-card__comments`) || target.classList.contains(`film-card__title`) || target.classList.contains(`film-card__poster`)) {
+      render(document.body, filmPopupComponent.getElement(), RenderPosition.BEFOREEND);
+      document.body.classList.add(`hide-overflow`);
+      const popupCommentsListElement = document.body.querySelector(`.film-details__comments-list`);
+      for (let i = 0; i < 3; i++) {
+        render(popupCommentsListElement, new PopupCommentsView(films[i]).getElement(), RenderPosition.BEFOREEND);
+      }
+      document.addEventListener(`keydown`, onEscKeyDown);
+
+      filmPopupComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, () => {
+        filmPopupComponent.getElement().remove();
+        filmPopupComponent.removeElement();
+        document.body.classList.remove(`hide-overflow`);
+        document.removeEventListener(`keydown`, onEscKeyDown);
+      });
+    }
+  });
+}; // рендер карточек фильма и попапа при клике на карточку
+
 for (let i = 0; i < Math.min(films.length, FILM_COUNT_PER_STEP); i++) {
-    render(filmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
-} //отрисовка карточек с фильмами
+  renderFilm(filmListContainerElement, films[i]);
+} // отрисовка карточек с фильмами
 
 if (films.length > FILM_COUNT_PER_STEP) {
   let renderedFilmCount = FILM_COUNT_PER_STEP;
 
-  render(filmListElement, createShowMoreButtonTemplate(), `beforeend`);
-  
-  const loadMoreButton = filmListElement.querySelector(`.films-list__show-more`);
-  
-  loadMoreButton.addEventListener(`click`, (evt) => {
-  evt.preventDefault();
-  films
-    .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
-    .forEach((film) => render(filmListContainerElement, createFilmCardTemplate(film), `beforeend`));
+  const showMoreBtnComponent = new ShowMoreButtonView();
+  render(filmListElement, showMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
+  showMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    films
+      .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
+      .forEach((film) => renderFilm(filmListContainerElement, film));
 
-  renderedFilmCount += FILM_COUNT_PER_STEP;
+    renderedFilmCount += FILM_COUNT_PER_STEP;
 
-  if (renderedFilmCount >= films.length) {
-    loadMoreButton.remove();
-  }
+    if (renderedFilmCount >= films.length) {
+      showMoreBtnComponent.getElement().remove();
+      showMoreBtnComponent.removeElement();
+    }
   });
-}//отрисовка кнопки "показать больше"
+}// отрисовка кнопки "показать больше"
 
-render(filmsElement, createTopRatedFilmListTemplate(), `beforeend`);//отрисовка блока, который отвечает за отображение списка рейтинговых фильмов
+const TopRatedFilmListComponent = new TopRatedFilmListView();
+render(filmsElement, TopRatedFilmListComponent.getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка рейтинговых фильмов
 
 const topFilmListElement = filmsElement.querySelector(`.films-list--extra`);
 const topFilmListContainerElement = topFilmListElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < TOP_FILM_COUNT; i++) {
-    render(topFilmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
-} //отрисовка карточек с рейтинговыми фильмами
+  renderFilm(topFilmListContainerElement, films[i]);
+} // отрисовка карточек с рейтинговыми фильмами
 
-render(filmsElement, createMostCommentedFilmListTemplate(), `beforeend`);//отрисовка блока, который отвечает за отображение списка просматриваемых фильмов
+render(filmsElement, new MostCommentedFilmListView().getElement(), RenderPosition.BEFOREEND);// отрисовка блока, который отвечает за отображение списка просматриваемых фильмов
 
 const commentedFilmListElement = filmsElement.querySelector(`.films-list--extra:nth-child(3)`);
 const commentedFilmListContainerElement = commentedFilmListElement.querySelector(`.films-list__container`);
 
 for (let i = 0; i < TOP_FILM_COUNT; i++) {
-    render(commentedFilmListContainerElement, createFilmCardTemplate(films[i]), `beforeend`);
-} //отрисовка карточек с просматриваемыми фильмами
-
-for (let i = 0; i < Math.min(films.length, FILM_COUNT_POPUP); i++) {
-  render(document.body, createPopupTemplate(films[i]), `beforeend`);
-} //отрисовка попапа
-
-const popupCommentsListElement = document.body.querySelector(`.film-details__comments-list`);
-
-for (let i = 0; i < 3; i++) {
-  render(popupCommentsListElement, createPopupCommentsTemplate(films[i]), `beforeend`);
-} //отрисовка попапа
+  renderFilm(commentedFilmListContainerElement, films[i]);
+} // отрисовка карточек с просматриваемыми фильмами
 
