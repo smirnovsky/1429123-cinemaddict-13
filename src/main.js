@@ -3,7 +3,7 @@ import StatsView from "./view/stats.js";
 import SortView from "./view/sort.js";
 import UserRankView from "./view/user-rank.js";
 import FilmsView from "./view/films.js";
-import ShowMoreButtonView from "./view/show-more-btn.js";
+import ShowMoreButtonView from "./view/show-more-button.js";
 import FilmListView from "./view/film-list.js";
 import FilmCardView from "./view/film-card.js";
 import TopRatedListView from "./view/top-rated-list.js";
@@ -90,9 +90,9 @@ const renderBoard = (listContainer, listFilms) => {
   if (films.length > FILM_COUNT_PER_STEP) {
     let renderedFilmCount = FILM_COUNT_PER_STEP;
 
-    const showMoreBtnComponent = new ShowMoreButtonView();
-    render(filmListComponent.getElement(), showMoreBtnComponent.getElement(), RenderPosition.BEFOREEND);
-    showMoreBtnComponent.getElement().addEventListener(`click`, (evt) => {
+    const ShowMoreButtonComponent = new ShowMoreButtonView();
+    render(filmListComponent.getElement(), ShowMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+    ShowMoreButtonComponent.getElement().addEventListener(`click`, (evt) => {
       evt.preventDefault();
       films
         .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
@@ -100,8 +100,8 @@ const renderBoard = (listContainer, listFilms) => {
 
       renderedFilmCount += FILM_COUNT_PER_STEP;
       if (renderedFilmCount >= films.length) {
-        showMoreBtnComponent.getElement().remove();
-        showMoreBtnComponent.removeElement();
+        ShowMoreButtonComponent.getElement().remove();
+        ShowMoreButtonComponent.removeElement();
       }
     });
   }// отрисовка кнопки "показать больше"
