@@ -1,5 +1,5 @@
 import {POSTERS, DESCRIPTIONS, TITLES, GENRIES} from '../const.js';
-import {generatePopupComments} from "../view/popup-comments.js";
+import {generateComments} from "../mock/comments.js";
 import {getRandomInteger, getRandomFloat, generateWord, generateDay} from "../utils.js";
 
 export const generateFilm = (dueDate) => {
@@ -18,7 +18,7 @@ export const generateFilm = (dueDate) => {
     genre: generateWord(GENRIES),
     description: generateWord(DESCRIPTIONS),
     ageLimit: getRandomInteger(0, 22),
-    comments: generatePopupComments(),
+    comments: generateComments(),
     isAddToWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatchlist: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1))

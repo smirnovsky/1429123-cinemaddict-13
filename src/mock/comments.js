@@ -1,7 +1,7 @@
 import {getRandomInteger, generateDay} from "../utils.js";
 import {EMOJIES} from "../const.js";
 
-export const generatePopupComments = () => {
+export const generateComments = () => {
   const comments = [
     `Хороший фильм!`,
     `Понравился`,
