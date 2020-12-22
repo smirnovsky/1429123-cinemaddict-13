@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 import {EMOJIES} from "../const.js";
 
 
@@ -143,26 +143,24 @@ const createPopupTemplate = (film) => {
 </section>`;
 };
 
-export default class Popup {
+export default class Popup extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-
-    this._element = null;
+    this._popupCancelHandler = this._popupCancelHandler.bind(this);
   }
 
   getTemplate() {
     return createPopupTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _popupCancelHandler(evt) {
+    evt.preventDefault();
+    this._callback.popupCancel();
   }
 
-  removeElement() {
-    this._element = null;
+  setPopupCancelHandler(callback) {
+    this._callback.popupCancel = callback;
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, this._popupCancelHandler);
   }
 }

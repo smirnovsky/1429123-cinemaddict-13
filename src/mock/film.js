@@ -1,6 +1,6 @@
 import {POSTERS, DESCRIPTIONS, TITLES, GENRIES} from '../const.js';
 import {generateComments} from "../mock/comments.js";
-import {getRandomInteger, getRandomFloat, generateWord, generateDay} from "../utils.js";
+import {getRandomInteger, getRandomFloat, generateWord, generateDay} from "../utils/common.js";
 
 export const generateFilm = (dueDate) => {
   return {

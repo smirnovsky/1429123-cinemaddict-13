@@ -1,6 +1,6 @@
-import {RANK} from '../const.js';
-import {generateWord} from "../utils.js";
-import {createElement} from "../utils.js";
+import {RANK} from "../const.js";
+import {generateWord} from "../utils/common.js";
+import AbstractView from "./abstract.js";
 
 const createUserRankTemplate = () => {
 
@@ -10,24 +10,8 @@ const createUserRankTemplate = () => {
   </section>`;
 };
 
-export default class UserRank {
-  constructor() {
-    this._element = null;
-  }
-
+export default class UserRank extends AbstractView {
   getTemplate() {
     return createUserRankTemplate();
   } // возвращает разметку
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }// получает элемент, который будет вставлен в DOM
-
-  removeElement() {
-    this._element = null;
-  }
 }

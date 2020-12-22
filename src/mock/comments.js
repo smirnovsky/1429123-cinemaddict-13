@@ -1,4 +1,4 @@
-import {getRandomInteger, generateDay} from "../utils.js";
+import {getRandomInteger, generateDay} from "../utils/common.js";
 import {EMOJIES} from "../const.js";
 
 export const generateComments = () => {
