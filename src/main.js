@@ -86,16 +86,16 @@ const renderBoard = (listContainer, listFilms) => {
   if (films.length > FILM_COUNT_PER_STEP) {
     let renderedFilmCount = FILM_COUNT_PER_STEP;
 
-    const ShowMoreButtonComponent = new ShowMoreButtonView();
-    render(filmListComponent, ShowMoreButtonComponent, RenderPosition.BEFOREEND);
-    ShowMoreButtonComponent.setClickHandler(() => {
+    const showMoreButtonComponent = new ShowMoreButtonView();
+    render(filmListComponent, showMoreButtonComponent, RenderPosition.BEFOREEND);
+    showMoreButtonComponent.setClickHandler(() => {
       films
         .slice(renderedFilmCount, renderedFilmCount + FILM_COUNT_PER_STEP)
         .forEach((film) => renderFilm(filmListContainerElement, film));
 
       renderedFilmCount += FILM_COUNT_PER_STEP;
       if (renderedFilmCount >= films.length) {
-        remove(ShowMoreButtonComponent);
+        remove(showMoreButtonComponent);
       }
     });
   }// отрисовка кнопки "показать больше"
